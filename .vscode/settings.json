@@ -1,0 +1,16 @@
+{
+    "files.associations": {
+        "motordrivermain.h": "c",
+        "generalpurposefunctions.h": "c",
+        "callbacks.h": "c",
+        "motorcontrolstatemachine.h": "c",
+        "metryhandle.h": "c",
+        "counter.h": "c",
+        "debugfunctions.h": "c",
+        "spi.h": "c",
+        "generaldefines.h": "c",
+        "CALLBACKS.H": "cpp",
+        "chrono": "cpp",
+        "algorithm": "cpp"
+    }
+}
