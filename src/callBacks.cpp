@@ -215,19 +215,29 @@ void tst_callcabk_update_position()
   }
 }
 
+static float sin_wave(float t0, float A, float f, float t){
+  float sine = A * sin(2.0f * M_PI * f * t);
+  return sine;
+}
+
+static float fly_stroke(float t0, float A, float f, float t){
+    // from 2015's paper:
+    static float bias = 0.0f;
+    static float K = 0.7f;
+    float angle = bias + A * (asin(K * sin(2.0f * M_PI * f * t))/asin(K));
+}
+
+
 static void callcabk_update_position()
 {
-  // Sine wave function:
   static float freq = 5.0f;
   static float amp = M_PI / 2 ; 
   static uint32_t t0;
   if (FIRST_RUN_FLAG ==  1) 
      t0 = micros();
   FIRST_RUN_FLAG = 0; 
-  
   float t = (micros()-t0) / 1000000.0; // seconds since experiment began
-  float sine = amp * sin(2.0f * M_PI * freq * t);
-  motors[motor1].positionControler.ref = sine;
+  motors[motor1].positionControler.ref = sin_wave(t0,amp,freq,t);
 }
 
 void callcabk_update_velocity()
