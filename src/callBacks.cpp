@@ -28,12 +28,22 @@ static SIntCallBacks intCallBacksDB[endOfIntCallbacksFuncList];
 
 extern SMotorsData motors[NUM_OF_MOTORS];
 
+int f_position = 260; 
+int f_speed = 1020;
+
+void set_controller_freqs(float profile_freq, float n_samples){
+  // f_position = ...
+  // f_speed = ...
+  // from python code
+
+}
+
 //uint32_t pinCounter[16];
 
 void setTimedCallBacksDB(void)
 {
   timedCallBacksDB[motorHandle].func = handleMotors;
-  timedCallBacksDB[motorHandle].us = CALLBACK_uS(MOTOR_CONTROLLER_HZ); // 1000 hz
+  timedCallBacksDB[motorHandle].us = CALLBACK_uS(MOTOR_CONTROLLER_HZ);
   timedCallBacksDB[motorHandle].prevTimeCall = micros();
 
   timedCallBacksDB[sendmetry].func = callcabk_send_metry;
@@ -42,7 +52,7 @@ void setTimedCallBacksDB(void)
 
   // TODO: for position, change the callback and the hz 
   timedCallBacksDB[updateposition].func = callcabk_update_position;
-  timedCallBacksDB[updateposition].us = CALLBACK_uS(UPDATE_POSITION_HZ); // 240 hz
+  timedCallBacksDB[updateposition].us = CALLBACK_uS(UPDATE_POSITION_HZ);
   timedCallBacksDB[updateposition].prevTimeCall = micros();
 }
 
@@ -230,7 +240,7 @@ static float fly_stroke(float t0, float A, float f, float t){
 
 static void callcabk_update_position()
 {
-  static float freq = 5.0f;
+  static float freq = 20.0f;
   static float amp = M_PI / 2 ; 
   static uint32_t t0;
   if (FIRST_RUN_FLAG ==  1) 
@@ -240,34 +250,34 @@ static void callcabk_update_position()
   motors[motor1].positionControler.ref = sin_wave(t0,amp,freq,t);
 }
 
-void callcabk_update_velocity()
-{
-  motors[motor1].speedControler.ref *= -1;
-  // TODO: convert to speed. can also provide a static vector of values and increment index
-  // static int16_t i = 0;
-  // static int8_t dir = 1;
-  // static float step = PI/NUM_OF_STEPS;
-  // static float angle = 0.0f;
+void callcabk_update_velocity(){
+  /// all should be in seconds
+  static auto t0 = static_cast<float>(micros())/1000000.0f;
+  static auto dt = 1.0f / (PROFILE_FREQ * N_SAMPLES_PER_CYCLE);
+  static auto ts = 0.3f * dt; // time thershold
+  static auto t = t0 + dt; 
+  static auto t_next = t; 
+  static auto next_time = dt;
+  static auto angle_ref = PROFILE_AMP * sin(2.0f * M_PI * PROFILE_FREQ * next_time);
+  auto t_left = t - static_cast<float>(micros())/1000000.0f;
+  calcAngleFromEncoder(motor1); // updated angle read
+  static auto initial_angle = motors[motor1].positionControler.current;
 
-  // if((i < NUM_OF_STEPS) && (dir == 1))
-  // {
-  //   angle += step;
-  //   motors[motor1].speedControler.ref = 40.0; 
-  //   i++;
-  // }
-  // else if((i >= 0) && (dir == -1))
-  // {
-  //     angle -= step;
-  //     motors[motor1].positionControler.ref = angle;
-  //     i--;
-  // }
-  // else
-  // {
-  //    dir *= -1;
-  //    if (i >= NUM_OF_STEPS)
-  //       i= NUM_OF_STEPS-1;
-  //    if (i < 0)
-  //       i = 0;
-  // }
-//  motors[motor2].positionControler.ref = PI;
+  static int count = 0;
+  if (t_left <= ts){
+    next_time += dt;
+    t_next = static_cast<float>(micros())/1000000.0f + t_left + ts + dt; 
+    angle_ref = PROFILE_AMP * sin(2.0f * M_PI * PROFILE_FREQ * next_time);
+    t = t_next;
+  }
+  auto curr_angle = motors[motor1].positionControler.current - initial_angle;
+  auto delta_ang = angle_ref - curr_angle;
+  if (delta_ang < 0){
+    delta_ang = 0;
+  }
+  auto velocity = delta_ang / t_left;
+  Serialprintln("dt %f, ts %f, t %f, t_next %f, angle_ref %f, t_left %f, velocity %f, delta_ang %f, curr_angle %f", 
+   dt, ts, t, t_next, angle_ref, t_left, velocity, delta_ang, curr_angle);
+
+  motors[motor1].speedControler.ref = velocity;
 }

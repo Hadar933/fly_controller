@@ -47,6 +47,7 @@ typedef struct{
 }SIntCallBacks;
 
 // function protos
+void set_controller_freqs(float profile_freq, float n_samples);
 void setTimedCallBacksDB(void);
 //void setChangeDir(float);
 void executeTimedFunctions(void);

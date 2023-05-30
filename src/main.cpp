@@ -12,7 +12,7 @@ extern SMotorsData motors[NUM_OF_MOTORS];
 void setup() 
 {
   Serial.begin(115200);
-  delay(5000);
+  // delay(5000);
   Serial.println("At Setup");
   pinMode(MOTOR1_PWM_U_PIN, OUTPUT);
   analogWriteFrequency(MOTOR1_PWM_U_PIN, 1000000);
@@ -42,7 +42,7 @@ void setup()
 
   motorDriverPhaseConfigurationInit();
   Serial.println("motorDriverPhaseConfigurationInit done");
-
+  set_controller_freqs(PROFILE_FREQ, N_SAMPLES_PER_CYCLE);
   setTimedCallBacksDB();
   Serial.println("setTimedCallBacksDB done");
 
@@ -57,7 +57,7 @@ void setup()
 
   Serial.println("Setup done");
 
-  // motors[motor1].speedControler.ref = 40.0; // rad/sec. doesnt do anything
+  // motors[motor1].speedControler.ref = 40.0; // rad/sec.
 }
 
 int FIRST_RUN_FLAG = 1;

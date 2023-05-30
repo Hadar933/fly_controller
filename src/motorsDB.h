@@ -11,17 +11,17 @@
 #define MOTOR_EFFICIENCY (0.63 * MOTOR_GEAR_EFFICIENCY)
 #define GEAR_RATIO (15.0)
 #define INV_GEAR_RATIO (1.0/GEAR_RATIO)
-#define POWER_SUPPLY_VOLTAGE (5.0)
+#define POWER_SUPPLY_VOLTAGE (12.0)
 #define STARTING_VOLTAGE (0.05) //percent from power supply
 
 
 // control gains
 // TODO - need to finetune
-#define KP_SPEED (10.0) //2.0
-#define KI_SPEED (5.0) // 0.02
+#define KP_SPEED (1.0) 
+#define KI_SPEED (0.1) 
 
-#define KP_POS (400.0)   // 50.0
-#define KI_POS (0.15) // 0.01
+#define KP_POS (400.0)   
+#define KI_POS (0.15) 
 
 #define MOTOR_CONTROLLER_HZ (1000) // TODO - change to the correct Hz (might not work for very slow velocities)
 

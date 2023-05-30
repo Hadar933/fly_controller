@@ -394,7 +394,6 @@ void speedControlHandle(int motor)
 void positionControlHandle(int motor)
 {
   float speedRef = PIControl(&motors[motor].positionControler, KP_POS, KI_POS);
-  // speedRef = 1.0;
   Serial.print(micros());
   Serial.print(", 3, ");
   Serial.println(speedRef);

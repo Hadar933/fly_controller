@@ -4,9 +4,14 @@
 
 #include <Arduino.h>
 
-//Debug
+
+
 //#define DEBUG_SPEED_CONTROL
 //#define DEBUG_HULLS
+
+#define PROFILE_FREQ 5.0f
+#define N_SAMPLES_PER_CYCLE 12.0f
+#define PROFILE_AMP M_PI/2.0f
 
 // #define SPEED_CONTROL_ON 
 #define POSITION_CONTROL_ON

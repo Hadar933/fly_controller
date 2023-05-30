@@ -27,7 +27,9 @@ typedef struct SMovingAverage
 // functions protos
 void continuousAverage(SContinuousAverage * dataIn);
 void movingAverage(SMovingAverage * dataIn);
+void Serialprintln(const char* input...);
 
 #define CALLBACK_uS(hz) (1.0/((float)hz)*1000000.0)
 
 #endif /* INC_GENERALPURPOSEFUNCTIONS_H_ */
+
