@@ -9,10 +9,14 @@ using namespace std;
 
 extern SMotorsData motors[NUM_OF_MOTORS];
 
+float freq = 20;
+float amp = M_PI / 6;
+
 void setup() 
 {
   Serial.begin(115200);
   // delay(5000);
+
   Serial.println("At Setup");
   pinMode(MOTOR1_PWM_U_PIN, OUTPUT);
   analogWriteFrequency(MOTOR1_PWM_U_PIN, 1000000);

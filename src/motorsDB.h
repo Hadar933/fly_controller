@@ -25,16 +25,16 @@
 
 #define MOTOR_CONTROLLER_HZ (1000) // TODO - change to the correct Hz (might not work for very slow velocities)
 
-#define SEND_METRY_HZ (300.0f) // 
+#define SEND_METRY_HZ (300.0f) 
 
 
 #define CHANGE_DIR_HZ (40.0f)
 #define NUM_OF_STEPS (6.0)
-#define UPDATE_POSITION_HZ (NUM_OF_STEPS*CHANGE_DIR_HZ)
+#define UPDATE_POSITION_HZ (NUM_OF_STEPS*CHANGE_DIR_HZ) 
 #define UPDATE_VELOCITY_HZ (1)
 
 
-#define MAX_SPEED (63.0f) //(DEG2RAD(180.0f)/CHANGE_DIR_HZ) * 10
+#define MAX_SPEED (300.0f) //(DEG2RAD(180.0f)/CHANGE_DIR_HZ) * 10
 #define MIN_SPEED (-1.0f * MAX_SPEED)
 
 #endif /* SRC_MOTORSCHARACTERSDB_H_ */

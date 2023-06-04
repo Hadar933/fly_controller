@@ -1,7 +1,6 @@
 #include "callBacks.h"
 #define _USE_MATH_DEFINES
 #include <math.h>
-
 #ifdef DEBUG_HULLS
   #include "debugFunctions.h"
 #endif
@@ -28,8 +27,9 @@ static SIntCallBacks intCallBacksDB[endOfIntCallbacksFuncList];
 
 extern SMotorsData motors[NUM_OF_MOTORS];
 
-int f_position = 260; 
-int f_speed = 1020;
+extern float freq;
+extern float amp;
+
 
 void set_controller_freqs(float profile_freq, float n_samples){
   // f_position = ...
@@ -40,7 +40,7 @@ void set_controller_freqs(float profile_freq, float n_samples){
 
 //uint32_t pinCounter[16];
 
-void setTimedCallBacksDB(void)
+void setTimedCallBacksDB()
 {
   timedCallBacksDB[motorHandle].func = handleMotors;
   timedCallBacksDB[motorHandle].us = CALLBACK_uS(MOTOR_CONTROLLER_HZ);
@@ -50,7 +50,7 @@ void setTimedCallBacksDB(void)
   timedCallBacksDB[sendmetry].us = CALLBACK_uS(SEND_METRY_HZ); // 300hz
   timedCallBacksDB[sendmetry].prevTimeCall = micros();
 
-  // TODO: for position, change the callback and the hz 
+  // for position, use func = callback_update_position and us = CALLBACK_uS(UPDATE_POSITION_HZ)
   timedCallBacksDB[updateposition].func = callcabk_update_position;
   timedCallBacksDB[updateposition].us = CALLBACK_uS(UPDATE_POSITION_HZ);
   timedCallBacksDB[updateposition].prevTimeCall = micros();
@@ -225,12 +225,12 @@ void tst_callcabk_update_position()
   }
 }
 
-static float sin_wave(float t0, float A, float f, float t){
+float sin_wave(float t0, float A, float f, float t){
   float sine = A * sin(2.0f * M_PI * f * t);
   return sine;
 }
 
-static float fly_stroke(float t0, float A, float f, float t){
+float fly_stroke(float t0, float A, float f, float t){
     // from 2015's paper:
     static float bias = 0.0f;
     static float K = 0.7f;
@@ -240,8 +240,8 @@ static float fly_stroke(float t0, float A, float f, float t){
 
 static void callcabk_update_position()
 {
-  static float freq = 20.0f;
-  static float amp = M_PI / 2 ; 
+  // static float freq = 20.0f;
+  // static float amp = M_PI / 6 ; 
   static uint32_t t0;
   if (FIRST_RUN_FLAG ==  1) 
      t0 = micros();

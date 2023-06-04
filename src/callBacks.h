@@ -48,7 +48,7 @@ typedef struct{
 
 // function protos
 void set_controller_freqs(float profile_freq, float n_samples);
-void setTimedCallBacksDB(void);
+void setTimedCallBacksDB();
 //void setChangeDir(float);
 void executeTimedFunctions(void);
 
@@ -63,8 +63,8 @@ void callcabk_send_metry();
 void callcabk_update_position();
 void callcabk_update_velocity();
 
-static float sin_wave(float t0, float A, float f, float t);
-static float fly_stroke(float t0, float A, float f, float t);
+float sin_wave(float t0, float A, float f, float t);
+float fly_stroke(float t0, float A, float f, float t);
 
 void callback_u_interrupt_m1();
 void callback_v_interrupt_m1();
